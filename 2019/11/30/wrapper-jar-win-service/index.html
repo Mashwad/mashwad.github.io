@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang>
+  <head><meta name="generator" content="Hexo 3.9.0">
+    
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1">
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+  <meta name="description" content="Java Service Wrapper 封装 Jar 为 Windows服务">
+
+
+
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="ByteDusk'S Blog">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=1.1">
+
+
+
+<link rel="canonical" href="http://www.bytedusk.com/2019/11/30/wrapper-jar-win-service/">
+
+
+<meta name="description" content="参考 SIMON KRENGER的博客  须知 由于官方不提供 x64 社区版，此版本由 SIMON KRENGER 根据社区版源码编译  使用版本 Java Service Wrapper Community Edition 3.5.36，下载地址  安装注意事项 安装前需要配置 JRE 环境，设置 JAVA_HOME 环境变量  安装包主要包含如下：WrapperTest  |—bin #来自">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java Service Wrapper 封装 Jar 为 Windows服务">
+<meta property="og:url" content="http://www.bytedusk.com/2019/11/30/wrapper-jar-win-service/index.html">
+<meta property="og:site_name" content="ByteDusk&#39;S Blog">
+<meta property="og:description" content="参考 SIMON KRENGER的博客  须知 由于官方不提供 x64 社区版，此版本由 SIMON KRENGER 根据社区版源码编译  使用版本 Java Service Wrapper Community Edition 3.5.36，下载地址  安装注意事项 安装前需要配置 JRE 环境，设置 JAVA_HOME 环境变量  安装包主要包含如下：WrapperTest  |—bin #来自">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2021-01-19T06:07:37.970Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java Service Wrapper 封装 Jar 为 Windows服务">
+<meta name="twitter:description" content="参考 SIMON KRENGER的博客  须知 由于官方不提供 x64 社区版，此版本由 SIMON KRENGER 根据社区版源码编译  使用版本 Java Service Wrapper Community Edition 3.5.36，下载地址  安装注意事项 安装前需要配置 JRE 环境，设置 JAVA_HOME 环境变量  安装包主要包含如下：WrapperTest  |—bin #来自">
+
+
+<link rel="stylesheet" type="text/css" href="/css/style.css?v=1.1">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+
+
+
+
+
+<script type="text/javascript">
+  var themeConfig = {
+    fancybox: {
+      enable: false
+    },
+  };
+</script>
+
+
+
+
+  
+
+
+
+    <title> Java Service Wrapper 封装 Jar 为 Windows服务 - ByteDusk'S Blog </title>
+  </head>
+
+  <body>
+    <div id="page">
+      <header id="masthead"><div class="site-header-inner">
+    <h1 class="site-title">
+        <a href="/." class="logo">ByteDusk'S Blog</a>
+    </h1>
+
+    <nav id="nav-top">
+        
+            <ul id="menu-top" class="nav-top-items">
+                
+                    <li class="menu-item">
+                        <a href="/about">
+                            
+                            
+                                ABOUT
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        
+  </nav>
+</div>
+
+      </header>
+      <div id="content">
+        
+    <div id="primary">
+        
+
+  <article class="post">
+    <header class="post-header">
+      <h1 class="post-title">
+        
+          Java Service Wrapper 封装 Jar 为 Windows服务
+        
+      </h1>
+      
+        <time class="post-time">
+            2019-11-30
+        </time>
+      
+    </header>
+
+
+
+  <!--
+        <div class="post-content">
+            <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="(https://www.krenger.ch/blog/tag/java-service-wrapper/">SIMON KRENGER的博客</a></li>
+</ul>
+<h3 id="须知"><a href="#须知" class="headerlink" title="须知"></a>须知</h3><ul>
+<li>由于官方不提供 x64 社区版，此版本由 <a href="https://www.krenger.ch/" target="_blank" rel="noopener">SIMON KRENGER</a> 根据社区版源码编译 </li>
+<li>使用版本 Java Service Wrapper Community Edition 3.5.36，<a href="https://www.krenger.ch/blog/tag/java-service-wrapper/" target="_blank" rel="noopener">下载地址</a></li>
+</ul>
+<h3 id="安装注意事项"><a href="#安装注意事项" class="headerlink" title="安装注意事项"></a>安装注意事项</h3><ul>
+<li><p>安装前需要配置 JRE 环境，设置 JAVA_HOME 环境变量</p>
+</li>
+<li><p>安装包主要包含如下：<br>WrapperTest<br>  |—bin #来自于wrapper_windows-x86-64-3.5.36\bin 目录<br>  |&emsp;|— InstallTestWrapper-NT.bat<br>  |&emsp;|—TestWrapper.bat<br>  |&emsp;|— UninstallTestWrapper-NT.bat<br>  |&emsp;|— wrapper.exe<br>  |—conf  #来自于wrapper_windows-x86-64-3.5.36\conf 目录<br>  |&emsp;|—wrapper.conf<br>  |—lang<br>  |—lib  #来自于wrapper_windows-x86-64-3.5.36\lib 目录<br>  |&emsp;|— wrapper-test.jar  #待替换的jar<br>  |&emsp;|—wrapper.dll<br>  |&emsp;|–wrapper.jar<br>  |—logs</p>
+</li>
+<li><p>主要待修改文件如下<br>conf/wrapper.conf中修改如下：</p>
+<p>  由于使用SimpleApp方式安装服务，此处需要使用设定值如下<br>  # Java Main class.  This class must implement the WrapperListener interface<br>  #  or guarantee that the WrapperManager class is initialized.  Helper<br>  #  classes are provided to do this for you.<br>  #  See the following page for details:<br>  #  <a href="http://wrapper.tanukisoftware.com/doc/english/integrate.html" target="_blank" rel="noopener">http://wrapper.tanukisoftware.com/doc/english/integrate.html</a><br>  <strong>wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp</strong></p>
+<p>  # Java Classpath (include wrapper.jar)  Add class path elements as<br>  #  needed starting from 1<br>  <strong>wrapper.java.classpath.1=../lib/wrapper-test.jar #待替换jar包</strong></p>
+<p>  # Application parameters.  Add parameters as needed starting from 1<br>  <strong>wrapper.app.parameter.1=com.bytedusk.wrapper.test.WrapperTest  #Jar包中带main方法的主类</strong></p>
+<p>  # Name of the service 服务名<br>  <strong>wrapper.name=testwrapper</strong></p>
+<p>  # Display name of the service  服务显示名<br>  <strong>wrapper.displayname=Test Wrapper Sample Application</strong></p>
+<p>  # Description of the service 服务描述<br>  <strong>wrapper.description=Test Wrapper Sample Application Description</strong></p>
+</li>
+</ul>
+<p>注：    服务名与显示名称的区别：服务名称是系统定义的，用于区别其他服务的标识; 而显示名称是显示在services.msc里的名称。</p>
+
+        </div>
+     -->
+
+    
+      <div class="post-content">
+            <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><ul>
+<li><a href="(https://www.krenger.ch/blog/tag/java-service-wrapper/">SIMON KRENGER的博客</a></li>
+</ul>
+<h3 id="须知"><a href="#须知" class="headerlink" title="须知"></a>须知</h3><ul>
+<li>由于官方不提供 x64 社区版，此版本由 <a href="https://www.krenger.ch/" target="_blank" rel="noopener">SIMON KRENGER</a> 根据社区版源码编译 </li>
+<li>使用版本 Java Service Wrapper Community Edition 3.5.36，<a href="https://www.krenger.ch/blog/tag/java-service-wrapper/" target="_blank" rel="noopener">下载地址</a></li>
+</ul>
+<h3 id="安装注意事项"><a href="#安装注意事项" class="headerlink" title="安装注意事项"></a>安装注意事项</h3><ul>
+<li><p>安装前需要配置 JRE 环境，设置 JAVA_HOME 环境变量</p>
+</li>
+<li><p>安装包主要包含如下：<br>WrapperTest<br>  |—bin #来自于wrapper_windows-x86-64-3.5.36\bin 目录<br>  |&emsp;|— InstallTestWrapper-NT.bat<br>  |&emsp;|—TestWrapper.bat<br>  |&emsp;|— UninstallTestWrapper-NT.bat<br>  |&emsp;|— wrapper.exe<br>  |—conf  #来自于wrapper_windows-x86-64-3.5.36\conf 目录<br>  |&emsp;|—wrapper.conf<br>  |—lang<br>  |—lib  #来自于wrapper_windows-x86-64-3.5.36\lib 目录<br>  |&emsp;|— wrapper-test.jar  #待替换的jar<br>  |&emsp;|—wrapper.dll<br>  |&emsp;|–wrapper.jar<br>  |—logs</p>
+</li>
+<li><p>主要待修改文件如下<br>conf/wrapper.conf中修改如下：</p>
+<p>  由于使用SimpleApp方式安装服务，此处需要使用设定值如下<br>  # Java Main class.  This class must implement the WrapperListener interface<br>  #  or guarantee that the WrapperManager class is initialized.  Helper<br>  #  classes are provided to do this for you.<br>  #  See the following page for details:<br>  #  <a href="http://wrapper.tanukisoftware.com/doc/english/integrate.html" target="_blank" rel="noopener">http://wrapper.tanukisoftware.com/doc/english/integrate.html</a><br>  <strong>wrapper.java.mainclass=org.tanukisoftware.wrapper.WrapperSimpleApp</strong></p>
+<p>  # Java Classpath (include wrapper.jar)  Add class path elements as<br>  #  needed starting from 1<br>  <strong>wrapper.java.classpath.1=../lib/wrapper-test.jar #待替换jar包</strong></p>
+<p>  # Application parameters.  Add parameters as needed starting from 1<br>  <strong>wrapper.app.parameter.1=com.bytedusk.wrapper.test.WrapperTest  #Jar包中带main方法的主类</strong></p>
+<p>  # Name of the service 服务名<br>  <strong>wrapper.name=testwrapper</strong></p>
+<p>  # Display name of the service  服务显示名<br>  <strong>wrapper.displayname=Test Wrapper Sample Application</strong></p>
+<p>  # Description of the service 服务描述<br>  <strong>wrapper.description=Test Wrapper Sample Application Description</strong></p>
+</li>
+</ul>
+<p>注：    服务名与显示名称的区别：服务名称是系统定义的，用于区别其他服务的标识; 而显示名称是显示在services.msc里的名称。</p>
+
+      </div>
+      <footer class="post-footer">
+      
+
+        
+        
+  <nav class="post-nav">
+    
+      <a class="prev" href="/2020/04/30/ws-mtom-header/">
+        <i class="iconfont icon-left"></i>
+        <span class="prev-text nav-default">WebService Mtom与Header</span>
+        <span class="prev-text nav-mobile">Prev</span>
+      </a>
+    
+    
+      <a class="next" href="/2019/09/25/maven/">
+        <span class="next-text nav-default">Maven POM 文件简要解析</span>
+        <span class="prev-text nav-mobile">Next</span>
+        <i class="iconfont icon-right"></i>
+      </a>
+    
+  </nav>
+
+        
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+      </footer>
+    
+  </article>
+
+    </div>
+
+      </div>
+
+      <footer id="colophon"><span class="copyright-year">
+    
+        &copy;
+    
+        2014 -
+    
+    2021
+    <span class="footer-author">ByteDusk.</span>
+    <span class="power-by">
+        Powered by <a class="hexo-link" href="https://hexo.io/">Hexo</a> and <a class="theme-link" href="https://github.com/frostfan/hexo-theme-polarbear">Polar Bear</a> Modified by <a class="theme-link" href="https://github.com/bytedusk/hexo-theme-polarbear">ByteDusk</a>
+    </span>
+</span>
+
+      </footer>
+
+      <div class="back-to-top" id="back-to-top">
+        <i class="iconfont icon-up"></i>
+      </div>
+    </div>
+    
+
+
+    
+
+
+
+
+  
+    <script type="text/javascript" src="/lib/jquery/jquery-3.1.1.min.js"></script>
+  
+
+  
+
+    <script type="text/javascript" src="/js/src/theme.js?v=1.1"></script>
+<script type="text/javascript" src="/js/src/bootstrap.js?v=1.1"></script>
+
+  </body>
+</html>
