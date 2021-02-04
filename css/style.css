@@ -453,7 +453,7 @@ h6 {
   float: left; }
 
 #primary {
-  max-width: 850px;
+  max-width: 1000px;
   margin: 0 auto; }
 
 @media only screen and (max-width: 750px) {
